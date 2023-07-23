@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+files=""
+directories="test tests components pages styles app utility"
+
+for dir in $directories; do
+  if [ -d "$dir" ]; then
+    files="$files $(git diff --name-only --diff-filter=ACM --cached $dir)"
+  fi
+done
+
+if [ -n "$files" ]; then
+  npx prettier --write $files
+  git add $files
+fi
+
+exit 0
